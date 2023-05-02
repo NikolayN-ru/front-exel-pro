@@ -5,4 +5,5 @@ async function start() {
 }
 
 start().then(console.log);
-start().then(console.log);
+// start().then(console.log);
+// start().then(console.log);
