@@ -1,133 +1,61 @@
-import {ExcelComponent} from '@core/ExcelComponent'
+import { ExcelComponent } from "@core/ExcelComponent";
+import { createTable } from "@/components/table/table.template";
+import { $ } from "@core/dom";
 
 export class Table extends ExcelComponent {
-  static className = 'excel__table'
+  static className = "excel__table";
+
+  constructor($root) {
+    super($root, {
+      name: "Table",
+      listeners: ["mousedown"],
+      // listeners: ["mousedown", "click", 'mousemove', 'mouseup'],
+    });
+  }
 
   toHTML() {
-    return `
-      <div class="row">
-
-        <div class="row-info"></div>
-
-        <div class="row-data">
-          <div class="column">
-            A
-          </div>
-          <div class="column">
-            B
-          </div>
-          <div class="column">
-            C
-          </div>
-          <div class="column">
-            A
-          </div>
-          <div class="column">
-            B
-          </div>
-          <div class="column">
-            C
-          </div>
-          <div class="column">
-            A
-          </div>
-          <div class="column">
-            B
-          </div>
-          <div class="column">
-            C
-          </div>
-          <div class="column">
-            A
-          </div>
-          <div class="column">
-            B
-          </div>
-          <div class="column">
-            C
-          </div>
-          <div class="column">
-            A
-          </div>
-          <div class="column">
-            B
-          </div>
-          <div class="column">
-            C
-          </div>
-          <div class="column">
-            A
-          </div>
-          <div class="column">
-            B
-          </div>
-          <div class="column">
-            C
-          </div>
-          <div class="column">
-            A
-          </div>
-          <div class="column">
-            B
-          </div>
-          <div class="column">
-            C
-          </div>
-          <div class="column">
-            A
-          </div>
-          <div class="column">
-            B
-          </div>
-          <div class="column">
-            C
-          </div>
-          <div class="column">
-            A
-          </div>
-          <div class="column">
-            B
-          </div>
-          <div class="column">
-            C
-          </div>
-          <div class="column">
-            A
-          </div>
-          <div class="column">
-            B
-          </div>
-          <div class="column">
-            C
-          </div>
-
-        </div>
-
-      </div>
-      
-      <div class="row">
-        <div class="row-info">
-          1
-        </div>
-
-        <div class="row-data">
-          <div class="cell selected" contenteditable="">A1</div>
-          <div class="cell" contenteditable="">B2</div>
-          <div class="cell" contenteditable="">C3</div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="row-info">
-          2
-        </div>
-
-        <div class="row-data">
-          <div class="cell">A1</div>
-          <div class="cell">B2</div>
-          <div class="cell">C3</div>
-        </div>
-      </div>
-    `
+    return createTable(20);
   }
+
+  // onClick(event) {
+  //   // console.log("click", event);
+  // }
+
+  onMousedown(event) {
+    if (event.target.dataset.resize) {
+      const $resizer = $(event.target);
+      const $parent = $resizer.closest("[data-type='resizable']");
+      const coords = $parent.getCoords();
+      const type = $resizer.data.resize;
+
+      if (type !== "row") {
+        document.onmousemove = (e) => {
+          const delta = e.pageX - coords.right;
+          $parent.$el.style.width = coords.width + delta + "px";
+          document
+            .querySelectorAll(`[data-col="${$parent.data.col}"]`)
+            .forEach((el) => {
+              el.style.width = coords.width + delta + "px";
+            });
+        };
+      } else {
+        document.onmousemove = (e) => {
+          const delta = e.pageY - coords.bottom;
+          $parent.$el.style.height = coords.height + delta + "px";
+        };
+      }
+
+      document.onmouseup = (e) => {
+        document.onmousemove = null;
+      };
+    }
+  }
+
+  // onMousemove(){
+  //   console.log("mouseMove");
+  // }
+
+  // onMouseup(){
+  //   console.log("mouseUp");
+  // }
 }

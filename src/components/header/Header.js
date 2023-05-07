@@ -1,13 +1,7 @@
-import { ExcelComponent } from "@core/ExcelComponent";
+import {ExcelComponent} from '@core/ExcelComponent'
 
 export class Header extends ExcelComponent {
-  static className = "excel__header";
-  constructor($root) {
-    super($root, {
-      name: "header",
-      listeners: ["mouseover", "click"],
-    });
-  }
+  static className = 'excel__header'
 
   toHTML() {
     return `
@@ -24,15 +18,6 @@ export class Header extends ExcelComponent {
         </div>
 
       </div>
-    `;
-  }
-
-  onMouseover() {
-    console.log("header!!");
-  }
-
-  onClick() {
-    console.log('remove');
-    this.remove()
+    `
   }
 }
